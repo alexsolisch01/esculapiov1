@@ -1,0 +1,20 @@
+.bold {
+  font-weight: bold;
+}
+
+.boldunder {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.italic {
+  font-style: italic
+}
+
+.normal {
+  font-weight: normal
+}

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<factura xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xml/factura.xsd" id="comprobante" version="2.1.0">
+    <infoTributaria>
+        <ambiente>1</ambiente>
+        <tipoEmision>1</tipoEmision>
+        <razonSocial>FUNDACIÓN SANTA ISABEL MADRE DEL PRECURSOR</razonSocial>
+        <nombreComercial>FUNDACIÓN SANTA ISABEL MADRE DEL PRECURSOR</nombreComercial>
+        <ruc>0992587938001</ruc>
+        <claveAcceso>2108201801099258793800110010010000001484126153316</claveAcceso>
+        <codDoc>01</codDoc>
+        <estab>001</estab>
+        <ptoEmi>001</ptoEmi>
+        <secuencial>000000148</secuencial>
+        <dirMatriz>SANTA ELENA, COMERCIO S/N ABDON CALDERON</dirMatriz>
+    </infoTributaria>
+    <infoFactura>
+        <fechaEmision>21/08/2018</fechaEmision>
+        <dirEstablecimiento>SANTA ELENA, COMERCIO S/N ABDON CALDERON</dirEstablecimiento>
+        
+        <obligadoContabilidad>SI</obligadoContabilidad>        
+        <tipoIdentificacionComprador>07</tipoIdentificacionComprador>        
+        <razonSocialComprador>CONSUMIDOR FINAL</razonSocialComprador>
+        <identificacionComprador>9999999999</identificacionComprador>
+        <direccionComprador>------</direccionComprador>
+        <totalSinImpuestos>5.00</totalSinImpuestos>                
+        <totalDescuento>0.00</totalDescuento>
+        <totalConImpuestos>
+            <totalImpuesto>
+                <codigo>2</codigo>
+                <codigoPorcentaje>0</codigoPorcentaje>                
+                <baseImponible>5.00</baseImponible>                
+                <valor>00.00</valor>
+            </totalImpuesto>
+        </totalConImpuestos>
+        <propina>00.00</propina>
+        <importeTotal>5.00</importeTotal>
+        <moneda>DOLAR</moneda>        
+    </infoFactura>
+    <detalles>
+            <detalle>
+                        <codigoPrincipal>LAB10</codigoPrincipal>
+                        <codigoAuxiliar>LAB10</codigoAuxiliar> 
+                        <descripcion>BIOMETRIA HEMÁTICA</descripcion>                        
+                        <cantidad>1</cantidad>
+                        <precioUnitario>5.00</precioUnitario>
+                        
+                        <descuento>0.00</descuento>
+                        <precioTotalSinImpuesto> 5.00</precioTotalSinImpuesto>
+                        
+                        <impuestos>
+                            <impuesto>
+                                <codigo>2</codigo>
+                                <codigoPorcentaje>0</codigoPorcentaje>
+                                <tarifa>0</tarifa>
+                                <baseImponible>0.00</baseImponible>
+                                <valor>00.00</valor>
+                            </impuesto>                           
+                        </impuestos>
+                    </detalle> 
+    </detalles>
+    <infoAdicional>
+      <campoAdicional nombre="Direccion">------</campoAdicional> 
+      <campoAdicional nombre="email">------</campoAdicional> 
+      <campoAdicional nombre="Nota">ABAD CARRANZA LISETH LISBETH</campoAdicional> 
+    </infoAdicional>
+     
+</factura>

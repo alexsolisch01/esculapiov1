@@ -1,0 +1,55 @@
+/* Main CSS file - Consolidated styles for Esculapio */
+
+/* Bootstrap */
+@import url('bootstrap.css');
+
+/* Font Awesome */
+@import url('font-awesome.css');
+
+/* Ionicons */
+@import url('ionicons.css');
+
+/* AdminLTE Theme */
+@import url('AdminLTE.min.css');
+
+/* AdminLTE Skins */
+@import url('_all-skins.min.css');
+
+/* DataTables */
+@import url('datatables.min.css');
+
+/* Bootstrap Select */
+@import url('bootstrap-select.css');
+
+/* Responsive Bootstrap */
+@import url('responsive.bootstrap.min.css');
+
+/* jQuery UI */
+@import url('jquery-ui.min.css');
+
+/* FullCalendar */
+@import url('fullcalendar.min.css');
+
+/* Bootstrap WYSIHTML5 */
+@import url('bootstrap3-wysihtml5.min.css');
+
+/* Chart.js */
+@import url('Chart.css');
+
+/* Custom styles */
+@import url('stylemenulateral.css');
+
+/* Font types */
+@import url('TipoLetra.css');
+
+/* SweetAlert custom */
+@import url('sweetalert-custom.css');
+
+/* All icons */
+@import url('all.css');
+
+/* iCheck for login */
+@import url('blue.css');
+
+/* Custom overrides and enhancements */
+@import url('custom.css');

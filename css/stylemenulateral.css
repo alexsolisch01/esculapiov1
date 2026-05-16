@@ -1,0 +1,43 @@
+/* Estilos para iconos en el menú lateral */
+.sidebar-menu .treeview > a > .menu-icon {
+  width: 20px; /* Ancho fijo para alineación */
+  text-align: center;
+  margin-right: 10px; /* Espacio entre icono y texto */
+  font-size: 18px; /* Tamaño del icono */
+  color: #acc0c9; /* Color por defecto (gris claro) */
+  transition: color 0.3s ease; /* Transición suave para hover */
+}
+
+/* Hover en el enlace del menú */
+.sidebar-menu .treeview > a:hover > .menu-icon,
+.sidebar-menu .treeview.active > a > .menu-icon {
+  color: #8ae0f8; /* Color blanco al hacer hover o activar */
+}
+
+/* Para submenús (ya tienes FA aquí, pero ajusta si es necesario) */
+.sidebar-menu .treeview-menu > li > a > .fa {
+  width: 18px;
+  text-align: center;
+  margin-right: 12px;
+  font-size: 15px;
+  color: #2e63c8;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover en submenús */
+.sidebar-menu .treeview-menu > li > a:hover > .fa,
+.sidebar-menu .treeview-menu > li.active > a > .fa {
+  color: #2e63c8;
+  transform: scale(1.1);
+}
+
+/* Alineación general para el menú */
+.sidebar-menu .treeview > a {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+}
+
+.sidebar-menu .treeview > a > span {
+  flex: 1; /* Hace que el texto ocupe el espacio restante */
+}

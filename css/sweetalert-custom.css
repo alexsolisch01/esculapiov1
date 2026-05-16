@@ -1,0 +1,158 @@
+/* Custom SweetAlert Styles for the existing SweetAlert 1 implementation and fallback SweetAlert2 */
+
+.sweet-alert,
+.swal-modal {
+  background-color: #ffffff !important;
+  border-radius: 12px !important;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.2) !important;
+  font-family: 'Arial', sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  color: #2f3a4a !important;
+  border: 1px solid #d8dde6 !important;
+  width: 420px !important;
+  max-width: 92% !important;
+  padding: 20px 20px 18px 20px !important;
+}
+
+.sweet-alert .sa-icon,
+.swal-modal .swal-icon {
+  margin: 0 auto 18px auto !important;
+  width: 70px !important;
+  height: 70px !important;
+}
+
+.sweet-alert .sa-icon.sa-success,
+.swal-icon--success {
+  border-color: #2f944e !important;
+  position: relative !important;
+  margin-bottom: 12px !important;
+}
+
+.sweet-alert .sa-icon.sa-success .sa-line.sa-tip,
+.swal-icon--success::before,
+.swal-icon--success::after {
+  background-color: #2f944e !important;
+}
+
+.sweet-alert .sa-icon.sa-warning,
+.swal-icon--warning {
+  border-color: #d78c1e !important;
+}
+
+.sweet-alert .sa-icon.sa-warning .sa-body,
+.sweet-alert .sa-icon.sa-warning .sa-dot,
+.swal-icon--warning .swal-icon--warning__body,
+.swal-icon--warning .swal-icon--warning__dot {
+  background-color: #d78c1e !important;
+}
+
+.sweet-alert .sa-icon.sa-error,
+.swal-icon--error {
+  border-color: #c94f4f !important;
+}
+
+.sweet-alert .sa-icon.sa-error .sa-line,
+.swal-icon--error .swal-icon--error__line {
+  background-color: #c94f4f !important;
+}
+
+.sweet-alert .sa-title,
+.swal-title {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #22303f !important;
+  margin: 0 0 12px 0 !important;
+  padding-top: 0 !important;
+  text-align: center !important;
+  line-height: 1.2 !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.sweet-alert .sa-text,
+.swal-text {
+  font-size: 14px !important;
+  color: #4a5663 !important;
+  margin: 0 0 18px 0 !important;
+  padding: 0 5px !important;
+  text-align: center !important;
+}
+
+.sweet-alert .sa-button-container,
+.swal-footer {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+  margin-top: 10px !important;
+}
+
+.sweet-alert .sa-button,
+.swal-button {
+  background-color: #2f80ed !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 10px 24px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  min-width: 100px !important;
+  box-shadow: 0 6px 16px rgba(47, 128, 237, 0.18) !important;
+}
+
+.sweet-alert .sa-button:hover,
+.swal-button:hover {
+  background-color: #1f6fe6 !important;
+}
+
+.sweet-alert .sa-button--cancel,
+.swal-button--cancel {
+  background-color: #7b8a9c !important;
+}
+
+.sweet-alert .sa-button--cancel:hover,
+.swal-button--cancel:hover {
+  background-color: #5f6f82 !important;
+}
+
+.sweet-alert .sa-button--confirm:hover,
+.swal-button:not(.swal-button--cancel):hover {
+  background-color: #1f6fe6 !important;
+}
+
+.sweet-alert .sa-icon.sa-success,
+.sweet-alert .sa-icon.sa-warning,
+.sweet-alert .sa-icon.sa-error {
+  margin-top: 10px !important;
+}
+
+.sweet-alert .sa-icon.sa-success:after,
+.sweet-alert .sa-icon.sa-success:before,
+.sweet-alert .sa-icon.sa-warning:before,
+.sweet-alert .sa-icon.sa-warning:after,
+.sweet-alert .sa-icon.sa-error:before,
+.sweet-alert .sa-icon.sa-error:after {
+  opacity: 1 !important;
+}
+
+.sweet-alert .sa-icon.sa-success .sa-placeholder,
+.sweet-alert .sa-icon.sa-success .sa-fix {
+  opacity: 0 !important;
+}
+
+.swal-overlay,
+.sweet-alert + .sweet-overlay {
+  background-color: rgba(0, 0, 0, 0.45) !important;
+}
+
+@keyframes animateErrorIcon {
+  0% {
+    transform: rotateX(100deg);
+    opacity: 0;
+  }
+  100% {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+}
