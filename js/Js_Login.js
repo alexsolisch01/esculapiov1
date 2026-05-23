@@ -1,47 +1,86 @@
+function obtenerCSRFToken() {
+    return $('meta[name="csrf-token"]').attr('content') || '';
+}
+
+function validarFortalezaContrasena(password) {
+    const tiene_minuscula = /[a-z]/.test(password);
+    const tiene_mayuscula = /[A-Z]/.test(password);
+    const tiene_numero = /[0-9]/.test(password);
+    const tiene_especial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+    const tiene_longitud = password.length >= 8 && password.length <= 128;
+    
+    return {
+        valido: tiene_minuscula && tiene_mayuscula && tiene_numero && tiene_especial && tiene_longitud,
+        errores: []
+    };
+}
+
+function mostrarRequisitosContrasena() {
+    return '<small class="text-muted d-block mt-2">Requisitos: Min 8 caracteres, máx 128, mayúscula, minúscula, número, especial</small>';
+}
+
 $(".body").on('click', "button#IniciarSesion", function(evt) {
     evt.preventDefault();
-    $.ajax({
+    IniciarSesion($('input#Pass').val());
+});
+
+$(document).on('click', '#ForgotPasswordLink', function(evt) {
+    evt.preventDefault();
+    $('#modalForgotPassword').modal('show');
+});
+
+$('#forgotPasswordForm').on('submit', function(evt) {
+    try {
+        evt.preventDefault();
+        var usuarioInput = $.trim($('#ForgotUsuario').val());
+        if (!usuarioInput) {
+            if (typeof swal === 'function') {
+                swal(NOMBRE_APLICACION, "Ingrese su usuario o correo electrónico.", "warning");
+            } else {
+                alert('Ingrese su usuario o correo electrónico.');
+            }
+            return;
+        }
+        // show loading indicator and disable submit (only if elements exist)
+        if ($('#forgotLoading').length) { $('#forgotLoading').show(); }
+        if ($('#SubmitForgotPassword').length) { $('#SubmitForgotPassword').prop('disabled', true); }
+
+        $.ajax({
         method: "POST",
         url: "Ajax/Aj_Usuario.php",
         data: {
-            Requerimiento: "ExisteSesion",
-            Usuario: $('input#Usuario').val(),
-            Pass: $('input#Pass').val()
+            Requerimiento: "OlvidoContrasena",
+            Usuario: usuarioInput,
+            csrf_token: obtenerCSRFToken()
         },
-        dataType: 'JSON',
-    }).done(function(respuesta) {    
-       if (respuesta[0]) {
-            IniciarSesion($('input#Pass').val());                       
-        }else{
-            IniciarSesion($('input#Pass').val());
-            var objeto = ["CerrarSesion",respuesta[1]];
-            send(JSON.stringify(objeto));
+        dataType: 'JSON'
+        }).done(function(respuesta) {
+        if (respuesta && respuesta.valido === true) {
+            $('#modalForgotPassword').modal('hide');
+            $('#ForgotUsuario').val('');
+            swal(NOMBRE_APLICACION, respuesta.mensaje || "Solicitud enviada.", "success");
+        } else {
+            swal(NOMBRE_APLICACION,
+                 (respuesta && respuesta.mensaje) || "No se pudo procesar la solicitud.",
+                 "warning");
         }
-    }).fail(function(jqXHR, textStatus, errorThrown) {
-    // Logging detallado para depuración (solo visible en consola del navegador)
-    console.error("Error en la petición AJAX:");
-    console.error("URL solicitada:", "Ajax/Aj_Usuario.php");
-    console.error("Código de estado HTTP:", jqXHR.status);
-    console.error("Texto del estado:", jqXHR.statusText);
-    console.error("Tipo de error:", textStatus);
-    console.error("Excepción lanzada:", errorThrown);
-    console.error("Respuesta del servidor:", jqXHR.responseText);
-
-    // Mensaje al usuario basado en el tipo de error
-    let mensajeUsuario = "Ocurrió un error inesperado.";
-    if (textStatus === "timeout") {
-        mensajeUsuario = "La solicitud tardó demasiado en responder. Verifica tu conexión a internet.";
-    } else if (jqXHR.status === 500) {
-        mensajeUsuario = "Error interno del servidor. Inténtalo de nuevo más tarde.";
-    } else if (jqXHR.status === 404) {
-        mensajeUsuario = "Recurso no encontrado. Contacta al administrador.";
-    } else if (textStatus === "parsererror") {
-        mensajeUsuario = "Error al procesar la respuesta del servidor.";
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            console.error("Error en la petición AJAX:", jqXHR.statusText, errorThrown);
+            if (typeof swal === 'function') {
+                swal(NOMBRE_APLICACION, "Ocurrió un error al enviar la solicitud. Inténtelo de nuevo.", "error");
+            } else {
+                alert('Ocurrió un error al enviar la solicitud. Inténtelo de nuevo.');
+            }
+        }).always(function() {
+            // hide loading and re-enable submit regardless of outcome
+            if ($('#forgotLoading').length) { $('#forgotLoading').hide(); }
+            if ($('#SubmitForgotPassword').length) { $('#SubmitForgotPassword').prop('disabled', false); }
+        });
+    } catch (e) {
+        console.error('Error manejando forgotPasswordForm submit:', e);
+        if ($('#forgotLoading').length) { $('#forgotLoading').hide(); }
+        if ($('#SubmitForgotPassword').length) { $('#SubmitForgotPassword').prop('disabled', false); }
     }
-
-    // Muestra el mensaje al usuario
-    swal("Esculapio!", mensajeUsuario, "error");
-    });
 });
 
 function IniciarSesion(psd){
@@ -51,91 +90,97 @@ function IniciarSesion(psd){
         data: {
             Requerimiento: "IniciarSesion",
             Usuario: $('input#Usuario').val(),
-            Pass: psd
+            Pass: psd,
+            csrf_token: obtenerCSRFToken()
         },
         dataType: 'JSON',
     }).done(function(respuesta) {    
     
-        if (respuesta[0]=='NuevoUsuario') {
-            var primer;
-            var segundo;
-            swal("Por Favor cambie su contraseña antes de continuar", {
-                content: {
-                element: "input",
-                attributes: {
-                    id: "PrimeraPass",
-                     placeholder: "Escriba su nueva contraseña",
-                     type: "password",
-                },
-                },
-            }).then((value) => {
-                if (value) {
-                    primer = value;
-                    swal("Confirmar Contraseña", {
-                        content: {
-                        element: "input",
-                        attributes: {
-                            id: "SegundaPass",
-                            placeholder: "Repita su nueva contraseña",
-                            type: "password",
-                        },
-                        },
-                    })
-                    .then((value1) => {
-                        segundo = value1;
-                        if (value1==value) {
-                            ModificarContra(respuesta[1],segundo);
-                        }else{
-                             swal("Esculapio!","Las Contraseñas Ingresadas no Coinciden, Por Favor intente nuevamente", "warning"); 
-                        } 
-                    }); 
-                } 
-            });
-
-
+        if (respuesta[0]=='NuevoUsuario' || respuesta[0]=='UsuarioTemporal') {
+            var titulo = (respuesta[0]=='NuevoUsuario') ? "Por favor cambie su contraseña antes de continuar" : "Se detectó contraseña temporal. Debe cambiar su contraseña antes de continuar";
+            mostrarDialogoNuevaContrasena(respuesta[1], titulo);
         }
+
         if (respuesta[0]=='UsuarioNormal') {
-            window.location.href = "index.php";                                   
-        }
-        if (respuesta[0]=='UsuarioMedico') {
-            window.location.href = "index.php?pagina=agenda";                                 
-        }
-        if (respuesta[0]=='UsuarioOdontologo') {
-            window.location.href = "index.php?pagina=odontograma";                                 
+            window.location.href = "index.php";
         }
         if (respuesta[0]=='UsuarioIncorrecto') {
-            swal("Esculapio!", "El Usuario Es Incorrecto", "warning");                                     
+            swal(NOMBRE_APLICACION, "El Usuario Es Incorrecto", "warning");                                     
+        }
+        if (respuesta[0]=='UsuarioBloqueado') {
+            swal(NOMBRE_APLICACION, respuesta[1] || "Usuario bloqueado por exceso de intentos.", "error");                                     
         }
         if (respuesta[0]=='PsdIncorrecta') {
-            swal("Esculapio!", "La Contraseña Es Incorrecta", "warning");                                     
+            swal(NOMBRE_APLICACION, "La Contraseña Es Incorrecta", "warning");                                     
+        }
+        if (respuesta[0]=='ContraseñaTemporalExpirada') {
+            swal(NOMBRE_APLICACION, respuesta[1] || "La contraseña temporal ha expirado.", "error");                                     
         }
     }).fail(function(jqXHR, textStatus, errorThrown) {
-        swal("Esculapio!", "Ocurrio un error !  " + errorThrown, "error");
+        swal(NOMBRE_APLICACION, "Ocurrio un error !  " + errorThrown, "error");
     }); 
 }
 
-function ModificarContra(id,segundo){  
-    $.ajax({
-        method:"POST",
-        url:"Ajax/Aj_Usuario.php",
-        data: {Requerimiento:"ModificaContra",Segundo:segundo,Id:id},
-        dataType: "JSON",
-    }).done(function(respuesta) {
-        if(respuesta[0]==true){
-          IniciarSesion(segundo);
+function mostrarDialogoNuevaContrasena(usuarioId, titulo) {
+    swal({
+        title: titulo,
+        content: {
+            element: "div",
+            attributes: {
+                innerHTML: '<input type="password" id="PrimeraPass" placeholder="Nueva contraseña" class="form-control mb-2">' +
+                           mostrarRequisitosContrasena() +
+                           '<input type="password" id="SegundaPass" placeholder="Confirmar contraseña" class="form-control mt-3">'
+            }
         }
+    }).then(value => {
+        let primera = $('#PrimeraPass').val();
+        let segunda = $('#SegundaPass').val();
+        
+        if (!primera || !segunda) {
+            swal(NOMBRE_APLICACION, "Ingrese las dos contraseñas", "warning");
+            return;
+        }
+        
+        if (primera !== segunda) {
+            swal(NOMBRE_APLICACION, "Las contraseñas no coinciden", "warning");
+            return;
+        }
+        
+        // Validar fortaleza en cliente
+        if (!validarFortalezaContrasena(primera).valido) {
+            swal(NOMBRE_APLICACION, "Contraseña débil. Cumpla con todos los requisitos:\nMin 8 caracteres\nMayúscula\nMinúscula\nNúmero\nCarácter especial", "warning");
+            return;
+        }
+        
+        ModificarContra(usuarioId, primera);
     });
 }
 
-function CerrarSesion(id){  
-    console.log(id+" "+$('.body #CambiarContra').attr("fol"));
-    if($('.body #CambiarContra').attr("fol")==id){        
-        window.location.href = "index.php?pagina=salir";     
-    }else{
-        if(id!=undefined){
-            IniciarSesion($('input#Pass').val());     
+function ModificarContra(id, segundo){  
+    $.ajax({
+        method:"POST",
+        url:"Ajax/Aj_Usuario.php",
+        data: {
+            Requerimiento:"ModificaContra",
+            Segundo: segundo,
+            Id: id,
+            csrf_token: obtenerCSRFToken()
+        },
+        dataType: "JSON",
+    }).done(function(respuesta) {
+        if(respuesta.valido === true){
+            swal(NOMBRE_APLICACION, respuesta.mensaje, "success").then(() => {
+                IniciarSesion(segundo);
+            });
+        } else if (respuesta.errores && respuesta.errores.length > 0) {
+            let mensaje = "Errores:\n" + respuesta.errores.join("\n");
+            swal(NOMBRE_APLICACION, mensaje, "error");
+        } else {
+            swal(NOMBRE_APLICACION, respuesta.mensaje || "Error al cambiar contraseña", "error");
         }
-        //},1000);
-        
-    }
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        console.error("Error en petición ModificaContra:", jqXHR.status, textStatus, errorThrown);
+        swal(NOMBRE_APLICACION, "Error de conexión al cambiar contraseña. Intente de nuevo.", "error");
+    });
 }
+
